@@ -20,6 +20,10 @@ namespace VetAPI.Controllers
             _context = context;
         }
 
+        public void GenerateAppointmentData(int numberOfData){
+            
+        }
+
         // GET: api/Appointments
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointments()
@@ -28,6 +32,32 @@ namespace VetAPI.Controllers
           {
               return NotFound();
           }
+            return await _context.Appointments.ToListAsync();
+        }
+
+        [HttpGet("generate")]
+        public async Task<ActionResult<IEnumerable<Appointment>>> GenerateAppointmentData()
+        {
+
+          Appointment appointment = new Appointment();
+          appointment.OwnerName = "Lukito";
+          appointment.PetName = "John Krueger";
+          appointment.ContactDetails = "086612344321";
+          appointment.AppointmentTime = DateTime.Now;
+            _context.Appointments.Add(appointment);
+            appointment = new Appointment();
+          appointment.OwnerName = "Blush";
+          appointment.PetName = "John Krueger";
+          appointment.ContactDetails = "086612344321";
+          appointment.AppointmentTime = DateTime.Now;
+            _context.Appointments.Add(appointment);
+            await _context.SaveChangesAsync();
+
+        //     return CreatedAtAction(nameof(GetAppointment), new { id = appointment.Id }, appointment);
+        //   if (_context.Appointments == null)
+        //   {
+        //       return NotFound();
+        //   }
             return await _context.Appointments.ToListAsync();
         }
 
