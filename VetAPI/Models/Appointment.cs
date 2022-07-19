@@ -3,8 +3,9 @@ namespace VetAPI.Models
     public class Appointment
     {
         public long Id { get; set; }
-        public string? Name { get; set; }
-        // public bool IsComplete { get; set; }
+        public string? OwnerName { get; set; }
+        public string? PetName { get; set; }
+        public string? ContactDetails { get; set; }
         public DateTime AppointmentTime {get;set;}
     }
 }
