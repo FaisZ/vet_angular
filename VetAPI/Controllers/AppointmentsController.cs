@@ -85,6 +85,7 @@ namespace VetAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Appointment>> PostAppointment(Appointment appointment)
         {
+
           if (_context.Appointments == null)
           {
               return Problem("Entity set 'AppointmentContext.Appointments'  is null.");
@@ -92,7 +93,7 @@ namespace VetAPI.Controllers
             _context.Appointments.Add(appointment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAppointment", new { id = appointment.Id }, appointment);
+            return CreatedAtAction(nameof(GetAppointment), new { id = appointment.Id }, appointment);
         }
 
         // DELETE: api/Appointments/5
