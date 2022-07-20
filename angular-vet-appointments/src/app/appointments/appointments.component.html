@@ -1,0 +1,18 @@
+<h2>My Appointments</h2>
+<ul class="appointments">
+  <li *ngFor="let appointment of appointments">
+    <button [class.selected]="appointment=== selectedAppointment" type="button" (click)="onSelect(appointment)">
+      <span class="badge">{{appointment.ownerName}}</span>
+      <span class="name">{{appointment.petName}}</span>
+    </button>
+  </li>
+</ul>
+
+<div *ngIf="selectedAppointment">
+  <h2>{{selectedAppointment.petName | uppercase}} Details</h2>
+  <div>id: {{selectedAppointment.id}}</div>
+  <div>
+    <label for="pet-name">Pet name: </label>
+    <input id="pet-name" [(ngModel)]="selectedAppointment.petName" placeholder="name">
+  </div>
+</div>
