@@ -1,3 +1,5 @@
 
 *.dll
 VetAPI/obj/Debug/net6.0/VetAPI.assets.cache
+VetAPI/bin/Debug/net6.0/VetAPI.pdb
+VetAPI/obj/Debug/net6.0/VetAPI.pdb
