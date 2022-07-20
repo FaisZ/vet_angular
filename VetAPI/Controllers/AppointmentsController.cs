@@ -62,9 +62,9 @@ namespace VetAPI.Controllers
         DataPool randomDataSource = new DataPool();
         DateTime date = DateTime.Now;
         for(int i=0;i<100; i++){
-            date.AddDays(rand.Next(5));
-            date.AddHours(rand.Next(5));
-            date.AddMinutes(rand.Next(20));
+            date = date.AddDays(rand.Next(5));
+            date = date.AddHours(rand.Next(5));
+            date = date.AddMinutes(rand.Next(20));
             appointment = new Appointment();
             appointment.OwnerName = randomDataSource.GetRandomOwnerName();
             appointment.PetName = randomDataSource.GetRandomPetName();
