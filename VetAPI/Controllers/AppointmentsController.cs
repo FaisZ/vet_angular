@@ -35,29 +35,45 @@ namespace VetAPI.Controllers
             return await _context.Appointments.ToListAsync();
         }
 
+        [HttpGet("search/{searchString}")]
+        public async Task<ActionResult<Appointment>> SearchAppointments(string searchString)
+        {
+          if (_context.Appointments == null)
+          {
+              return NotFound();
+          }
+            var appointment = await _context.Appointments.FindAsync(searchString);
+
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+
+            return appointment;
+        }
+
         [HttpGet("generate")]
         public async Task<ActionResult<IEnumerable<Appointment>>> GenerateAppointmentData()
         {
+        
+        Random rand = new Random();
 
-          Appointment appointment = new Appointment();
-          appointment.OwnerName = "Lukito";
-          appointment.PetName = "John Krueger";
-          appointment.ContactDetails = "086612344321";
-          appointment.AppointmentTime = DateTime.Now;
-            _context.Appointments.Add(appointment);
+        Appointment appointment;
+        DataPool randomDataSource = new DataPool();
+        DateTime date = DateTime.Now;
+        for(int i=0;i<100; i++){
+            date.AddDays(rand.Next(5));
+            date.AddHours(rand.Next(5));
+            date.AddMinutes(rand.Next(20));
             appointment = new Appointment();
-          appointment.OwnerName = "Blush";
-          appointment.PetName = "John Krueger";
-          appointment.ContactDetails = "086612344321";
-          appointment.AppointmentTime = DateTime.Now;
+            appointment.OwnerName = randomDataSource.GetRandomOwnerName();
+            appointment.PetName = randomDataSource.GetRandomPetName();
+            appointment.ContactDetails = "086612344321";
+            appointment.AppointmentTime = date;
             _context.Appointments.Add(appointment);
+        }
             await _context.SaveChangesAsync();
 
-        //     return CreatedAtAction(nameof(GetAppointment), new { id = appointment.Id }, appointment);
-        //   if (_context.Appointments == null)
-        //   {
-        //       return NotFound();
-        //   }
             return await _context.Appointments.ToListAsync();
         }
 
