@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VetAPI.Models;
+using System.Web.Http.Cors;
 
 namespace VetAPI.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors(origins: "http://localhost:7139", headers: "*", methods: "*")]
     [ApiController]
     public class AppointmentsController : ControllerBase
     {
@@ -28,6 +30,7 @@ namespace VetAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointments()
         {
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin","http://localhost:4200");
           if (_context.Appointments == null)
           {
               return NotFound();

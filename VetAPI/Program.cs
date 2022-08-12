@@ -6,6 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddCors(
+    options => {
+        options.AddDefaultPolicy(
+            policy => {
+                policy.WithOrigins("http://example.com",
+                                "http://www.contoso.com");
+            }
+        );
+    }
+);
 builder.Services.AddDbContext<AppointmentContext>(opt =>
     opt.UseInMemoryDatabase("AppointmentList"));
 
@@ -26,6 +36,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors();
 
 app.MapControllers();
 
