@@ -38,11 +38,13 @@ namespace VetAPI.Controllers
             {
                 return NotFound();
             }
-            var res = _context.Appointments
+            var res = _context.Appointments;
+            IQueryable<Appointment> sortedResult = _context.Appointments;
+            sortedResult = sortedResult.OrderBy(e => e.AppointmentTime);
+
+            var query = sortedResult
             .Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize);
 
-            IQueryable<Appointment> query = res;
-            query = query.OrderBy(e => e.AppointmentTime);
             if(name!=null)
                 query = query.Where(e =>  e.PetName.Contains(name));
             if(date!=null)
