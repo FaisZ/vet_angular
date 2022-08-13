@@ -6,6 +6,6 @@ namespace VetAPI.Models
         public string? OwnerName { get; set; }
         public string? PetName { get; set; }
         public string? ContactDetails { get; set; }
-        public DateTime AppointmentTime {get;set;}
+        public string? AppointmentTime {get;set;}
     }
 }

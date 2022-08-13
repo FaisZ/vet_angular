@@ -11,5 +11,22 @@ namespace VetAPI.Models
         }
 
         public DbSet<Appointment> Appointments { get; set; } = null!;
+
+        public async Task<IEnumerable<Appointment>> Search(string? name, string? date)
+        {
+            IQueryable<Appointment> query = Appointments;
+                
+            if (name !=null && !string.IsNullOrEmpty(name))
+            {
+                query = query.Where(e => e.PetName.Contains(name));
+            }
+
+            if(date != null)
+            {
+                query = query.Where(e => e.AppointmentTime == date);
+            }
+
+            return await query.ToListAsync();
+        }
     }
 }

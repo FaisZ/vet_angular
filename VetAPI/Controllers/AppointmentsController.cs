@@ -28,7 +28,7 @@ namespace VetAPI.Controllers
 
         // GET: api/Appointments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointments([FromQuery] PaginationFilter filter)
+        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointments([FromQuery] PaginationFilter filter, string? name, string? date)
         {
             HttpContext.Response.Headers.Add("Access-Control-Allow-Origin","http://localhost:4200");
             // Console.WriteLine(filter.PageNumber);
@@ -38,45 +38,17 @@ namespace VetAPI.Controllers
             {
                 return NotFound();
             }
-            // return await _context.Appointments.ToListAsync();
-            return await _context.Appointments
-            .Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
-        }
+            var res = _context.Appointments
+            .Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize);
 
-        // GET: api/Appointments
-        // [HttpGet("page/{pageNumber}")]
-        // public async Task<ActionResult<IEnumerable<Appointment>>> GetPageAppointments([FromQuery] PaginationFilter filter)
-        // {
-        //     HttpContext.Response.Headers.Add("Access-Control-Allow-Origin","http://localhost:4200");
-        //   if (_context.Appointments == null)
-        //   {
-        //       return NotFound();
-        //   }
-        //     List<Appointment> paged = new List<Appointment>();
-        //     for(int i=0;i<100; i++){
-        //         paged.Add(_context.Appointments.ToList()[i]);
-        //     }
-        //     // return await _context.Appointments.ToListAsync();
-        //     return await _context.Appointments
-        //     .Skip(0 * 20).Take(20).ToListAsync();
-        // }
-
-        [HttpGet("search/{searchString}")]
-        public async Task<ActionResult<Appointment>> SearchAppointments(string searchString)
-        {
-            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin","http://localhost:4200");
-          if (_context.Appointments == null)
-          {
-              return NotFound();
-          }
-            var appointment = await _context.Appointments.FindAsync(searchString);
-
-            if (appointment == null)
-            {
-                return NotFound();
-            }
-
-            return appointment;
+            IQueryable<Appointment> query = res;
+            query = query.OrderBy(e => e.AppointmentTime);
+            if(name!=null)
+                query = query.Where(e =>  e.PetName.Contains(name));
+            if(date!=null)
+                query = query.Where(e =>  e.AppointmentTime.Contains(date));
+            Console.WriteLine(query);
+            return await query.ToListAsync();
         }
 
         [HttpGet("generate")]
@@ -87,16 +59,17 @@ namespace VetAPI.Controllers
 
         Appointment appointment;
         DataPool randomDataSource = new DataPool();
-        DateTime date = DateTime.Now;
+        DateTime date;
         for(int i=0;i<100; i++){
-            date = date.AddDays(rand.Next(5));
-            date = date.AddHours(rand.Next(5));
-            date = date.AddMinutes(rand.Next(20));
+            date = DateTime.Now;
+            date = date.AddDays(rand.Next(20));
+            date = date.AddHours(rand.Next(20));
+            date = date.AddMinutes(rand.Next(40));
             appointment = new Appointment();
             appointment.OwnerName = randomDataSource.GetRandomOwnerName();
             appointment.PetName = randomDataSource.GetRandomPetName();
             appointment.ContactDetails = "086612344321";
-            appointment.AppointmentTime = date;
+            appointment.AppointmentTime = date.ToString();
             _context.Appointments.Add(appointment);
         }
             await _context.SaveChangesAsync();
