@@ -28,19 +28,43 @@ namespace VetAPI.Controllers
 
         // GET: api/Appointments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointments()
+        public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointments([FromQuery] PaginationFilter filter)
         {
             HttpContext.Response.Headers.Add("Access-Control-Allow-Origin","http://localhost:4200");
-          if (_context.Appointments == null)
-          {
-              return NotFound();
-          }
-            return await _context.Appointments.ToListAsync();
+            // Console.WriteLine(filter.PageNumber);
+            // Console.WriteLine(filter.PageSize);
+            // var filters = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            if (_context.Appointments == null)
+            {
+                return NotFound();
+            }
+            // return await _context.Appointments.ToListAsync();
+            return await _context.Appointments
+            .Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToListAsync();
         }
+
+        // GET: api/Appointments
+        // [HttpGet("page/{pageNumber}")]
+        // public async Task<ActionResult<IEnumerable<Appointment>>> GetPageAppointments([FromQuery] PaginationFilter filter)
+        // {
+        //     HttpContext.Response.Headers.Add("Access-Control-Allow-Origin","http://localhost:4200");
+        //   if (_context.Appointments == null)
+        //   {
+        //       return NotFound();
+        //   }
+        //     List<Appointment> paged = new List<Appointment>();
+        //     for(int i=0;i<100; i++){
+        //         paged.Add(_context.Appointments.ToList()[i]);
+        //     }
+        //     // return await _context.Appointments.ToListAsync();
+        //     return await _context.Appointments
+        //     .Skip(0 * 20).Take(20).ToListAsync();
+        // }
 
         [HttpGet("search/{searchString}")]
         public async Task<ActionResult<Appointment>> SearchAppointments(string searchString)
         {
+            HttpContext.Response.Headers.Add("Access-Control-Allow-Origin","http://localhost:4200");
           if (_context.Appointments == null)
           {
               return NotFound();
