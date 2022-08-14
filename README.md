@@ -27,4 +27,4 @@ Some application may block the connection to this WEB API because of CORS. So, C
 
 By default, it will use origin at localhost:4200. If the app has a different address, change accordingly in the AppointmentController.cs file
 
-(https://github.com/FaisZ/vet_angular/blob/master/Images/Picture1.png?raw=true)
+https://github.com/FaisZ/vet_angular/blob/bf9c8ec50b41cc1ef814c7193ed21ec23dde8360/Images/Picture1.png
