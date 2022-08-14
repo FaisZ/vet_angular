@@ -38,17 +38,25 @@ namespace VetAPI.Controllers
             {
                 return NotFound();
             }
-            var res = _context.Appointments;
-            IQueryable<Appointment> sortedResult = _context.Appointments;
+
+            //var that will save the result filtered by date and name (if any)
+            IQueryable<Appointment> filteredResult = _context.Appointments;
+
+            //if the name search is not empty
+            if(name!=null)
+                filteredResult = filteredResult.Where(e =>  e.PetName.Contains(name));
+            //if the name search is not empty
+            if(date!=null)
+                filteredResult = filteredResult.Where(e =>  e.AppointmentTime.Contains(date));
+
+            //var that will sort the filtered result based on date
+            IQueryable<Appointment> sortedResult = filteredResult;
             sortedResult = sortedResult.OrderBy(e => e.AppointmentTime);
 
+            //further disperse the result in page format
             var query = sortedResult
             .Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize);
 
-            if(name!=null)
-                query = query.Where(e =>  e.PetName.Contains(name));
-            if(date!=null)
-                query = query.Where(e =>  e.AppointmentTime.Contains(date));
             Console.WriteLine(query);
             return await query.ToListAsync();
         }
@@ -63,15 +71,15 @@ namespace VetAPI.Controllers
         DataPool randomDataSource = new DataPool();
         DateTime date;
         for(int i=0;i<100; i++){
-            date = DateTime.Now;
-            date = date.AddDays(rand.Next(20));
-            date = date.AddHours(rand.Next(20));
-            date = date.AddMinutes(rand.Next(40));
+            date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            date = date.AddMonths(rand.Next(3));
+            date = date.AddDays(rand.Next(10));
+            date = date.AddHours(rand.Next(16));
             appointment = new Appointment();
             appointment.OwnerName = randomDataSource.GetRandomOwnerName();
             appointment.PetName = randomDataSource.GetRandomPetName();
             appointment.ContactDetails = "086612344321";
-            appointment.AppointmentTime = date.ToString();
+            appointment.AppointmentTime = date.ToString("yyyy-MM-dd HH:mm");
             _context.Appointments.Add(appointment);
         }
             await _context.SaveChangesAsync();
