@@ -6,7 +6,7 @@ The API enables user to generate random appointments and filter appointments bas
 
 ## Run App
 
-To run the application, clone the repository and run the WEB API in Visual Studio Code either with or without the debugging.
+To run the application, clone the repository, open the repo with `VETAPI` as the root folder and run the WEB API in Visual Studio Code either with or without the debugging.
 
 The default address of appointments can be accessed from:
 `https://localhost:<port>/api/appointments`
