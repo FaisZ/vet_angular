@@ -22,3 +22,9 @@ httprepl https://localhost:<port>/api/appointments
 
 to get a list of appointments, after running the above command, run 'get' without the apostrophe.
 to generate a 100 random appointments at once, run 'get generate' without the apostrophe.
+
+Some application may block the connection to this WEB API because of CORS. So, CORS is added to the API.
+
+By default, it will use origin at localhost:4200. If the app has a different address, change accordingly in the AppointmentController.cs file
+
+(https://github.com/FaisZ/vet_angular/blob/master/Images/Picture1.png?raw=true)
